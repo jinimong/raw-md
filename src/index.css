@@ -197,9 +197,18 @@ body {
 }
 
 .markdown-body {
-  max-width: 800px !important;
-  margin: 0 auto !important;
-  padding: 0 !important;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* github-markdown-css가 .markdown-body에 margin/padding을 덮어쓰므로
+   부모 컨텍스트 선택자로 specificity를 높여 중앙 정렬 보장 */
+.viewer-container .markdown-body,
+.preview-pane .markdown-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0;
 }
 
 /*
@@ -330,7 +339,7 @@ body {
 .mermaid-diagram {
   margin: 16px 0;
   padding: 16px;
-  background-color: var(--bgColor-default);
+  background-color: transparent;
   border: 1px solid var(--borderColor-default);
   border-radius: 6px;
   overflow-x: auto;

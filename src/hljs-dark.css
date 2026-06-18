@@ -1,8 +1,15 @@
-/* 다크모드 코드 하이라이팅 — github-dark-dimmed 색상 */
+/* 라이트모드 코드 하이라이팅 — github 테마 (data-color-mode 우선) */
+[data-color-mode="light"] .hljs {
+  color: #24292f;
+  background: #f6f8fa;
+}
+
+/* 다크모드 코드 하이라이팅 — github-dark 색상 */
+/* @media fallback: data-color-mode가 없을 때만 OS preference 반영 */
 @media (prefers-color-scheme: dark) {
   .hljs {
-    color: #adbac7;
-    background: #22272e;
+    color: #c9d1d9;
+    background: #161b22;
   }
   .hljs-doctag,
   .hljs-keyword,
@@ -79,10 +86,9 @@
   }
 }
 
-/* data-color-mode="dark" 일 때도 적용 */
 [data-color-mode="dark"] .hljs {
-  color: #adbac7;
-  background: #22272e;
+  color: #c9d1d9;
+  background: #161b22;
 }
 [data-color-mode="dark"] .hljs-doctag,
 [data-color-mode="dark"] .hljs-keyword,

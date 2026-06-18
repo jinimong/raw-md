@@ -10,7 +10,7 @@ function getSystemTheme(): Theme {
 function applyTheme(mode: ColorMode): Theme {
   const resolved = mode === 'auto' ? getSystemTheme() : mode
   // Primer Primitives
-  document.documentElement.setAttribute('data-color-mode', mode)
+  document.documentElement.setAttribute('data-color-mode', resolved)
   document.documentElement.setAttribute('data-light-theme', 'light')
   document.documentElement.setAttribute('data-dark-theme', 'dark')
   // github-markdown-css

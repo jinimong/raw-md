@@ -1,22 +1,10 @@
 import mermaid from 'mermaid'
 import { useEffect, useId, useRef, useState } from 'react'
 
-// 다크모드 감지
-function isDarkMode(): boolean {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-}
-
-let mermaidInitialized = false
-
-function initMermaid() {
-  if (mermaidInitialized) return
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: isDarkMode() ? 'dark' : 'default',
-    securityLevel: 'strict',
-    fontFamily: 'inherit',
-  })
-  mermaidInitialized = true
+// DOM에서 현재 테마 읽기 (useTheme.ts가 data-color-mode에 resolved 값을 쓴다)
+function getCurrentMermaidTheme(): 'dark' | 'default' {
+  const mode = document.documentElement.getAttribute('data-color-mode')
+  return mode === 'dark' ? 'dark' : 'default'
 }
 
 interface Props {
@@ -25,12 +13,30 @@ interface Props {
 
 export default function MermaidDiagram({ chart }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const uniqueId = useId().replace(/:/g, '_')
+  const uniqueId = useId().replace(/:/g, '')
   const [error, setError] = useState<string | null>(null)
   const [svg, setSvg] = useState<string | null>(null)
+  const [currentTheme, setCurrentTheme] = useState(getCurrentMermaidTheme)
 
   useEffect(() => {
-    initMermaid()
+    const observer = new MutationObserver(() => {
+      setCurrentTheme(getCurrentMermaidTheme())
+    })
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-color-mode'],
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: getCurrentMermaidTheme(),
+      securityLevel: 'strict',
+      fontFamily: 'inherit',
+    })
+
     let cancelled = false
     let renderCount = 0
 
@@ -59,7 +65,7 @@ export default function MermaidDiagram({ chart }: Props) {
     return () => {
       cancelled = true
     }
-  }, [chart, uniqueId])
+  }, [chart, uniqueId, currentTheme])
 
   if (error) {
     return (
