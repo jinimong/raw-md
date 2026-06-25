@@ -40,8 +40,8 @@ export function useTheme(): {
     if (mode !== 'auto') return
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
     const handleChange = () => {
-      setTheme(getSystemTheme())
-      document.documentElement.setAttribute('data-theme', getSystemTheme())
+      const resolved = applyTheme('auto')
+      setTheme(resolved)
     }
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
